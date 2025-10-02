@@ -34,6 +34,7 @@ Pod::Spec.new do |s|
   }
 
   s.dependency "React"
-  s.dependency 'MobileVLCKit', '3.3.17'
+  # VLC Player disabled - not needed for DLNA casting
+  # s.dependency 'MobileVLCKit', '3.3.17'
 end
 

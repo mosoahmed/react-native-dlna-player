@@ -21,6 +21,8 @@ android {
 
 dependencies {
     implementation 'com.facebook.react:react-native:+'
+
+    // DLNA/UPnP dependencies
     implementation files('libs/cdi-api.jar')
     implementation files('libs/http-2.2.1.jar')
     implementation files('libs/httpclient-4.2.2.jar')
@@ -40,8 +42,9 @@ dependencies {
     implementation files('libs/seamless-xml-1.0-alpha2.jar')
 
     implementation 'org.greenrobot:eventbus:3.3.1'
-
     implementation 'androidx.annotation:annotation:1.7.1'
     implementation 'androidx.core:core:1.12.0'
-    implementation 'org.videolan.android:libvlc-all:3.6.2'
+
+    // VLC Player - commented out (not needed for DLNA casting)
+    // compileOnly 'org.videolan.android:libvlc-all:3.6.2'
 }

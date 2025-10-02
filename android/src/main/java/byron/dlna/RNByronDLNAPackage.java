@@ -25,8 +25,7 @@ public class RNByronDLNAPackage implements ReactPackage {
     @NonNull
     @Override
     public List<ViewManager> createViewManagers(@NonNull ReactApplicationContext reactContext) {
-        return Collections.<ViewManager>singletonList(
-                new RNByronVlcManager()
-        );
+        // VLC player disabled - not needed for DLNA casting
+        return Collections.emptyList();
     }
 }
