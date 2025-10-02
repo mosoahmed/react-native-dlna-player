@@ -206,6 +206,141 @@ export default function VlcPlayerExample() {
 }
 ```
 
+### 3. HLS Streaming to Samsung TV
+
+```javascript
+import React, { useEffect, useState } from 'react';
+import { View, Button, Text, Alert } from 'react-native';
+import {
+  startService,
+  discoverDevices,
+  castToDevice,
+  findSamsungTV,
+  ByronEmitter,
+  castProgressEventName,
+} from '@byron-react-native/dlna-player';
+
+export default function HLSStreamingExample() {
+  const [samsungTV, setSamsungTV] = useState(null);
+  const [isStreaming, setIsStreaming] = useState(false);
+  const [progress, setProgress] = useState('');
+
+  useEffect(() => {
+    startService('HLS Streaming App');
+
+    // Listen for casting progress
+    const progressListener = ByronEmitter.addListener(
+      castProgressEventName,
+      (event) => {
+        setProgress(`${event.stage}: ${event.message}`);
+        console.log('Cast progress:', event);
+      }
+    );
+
+    // Auto-discover Samsung TV
+    discoverDevices().then((devices) => {
+      const tv = findSamsungTV(devices);
+      if (tv) {
+        setSamsungTV(tv);
+        Alert.alert('Samsung TV Found', tv.name);
+      }
+    });
+
+    return () => {
+      progressListener.remove();
+    };
+  }, []);
+
+  const streamHLS = async () => {
+    if (!samsungTV) {
+      Alert.alert('Error', 'No Samsung TV found');
+      return;
+    }
+
+    setIsStreaming(true);
+
+    try {
+      // HLS live stream example
+      await castToDevice(
+        samsungTV.id,
+        'https://test-streams.mux.dev/x36xhzz/x36xhzz.m3u8',
+        'HLS Live Stream'
+      );
+
+      Alert.alert('Success', 'HLS stream started on Samsung TV!');
+    } catch (error) {
+      console.error('HLS streaming error:', error);
+      Alert.alert('Error', `Failed to stream: ${error.message}`);
+    } finally {
+      setIsStreaming(false);
+    }
+  };
+
+  const streamVOD = async () => {
+    if (!samsungTV) return;
+
+    setIsStreaming(true);
+
+    try {
+      // HLS VOD example
+      await castToDevice(
+        samsungTV.id,
+        'https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8',
+        'Apple HLS Demo'
+      );
+
+      Alert.alert('Success', 'HLS VOD started!');
+    } catch (error) {
+      Alert.alert('Error', error.message);
+    } finally {
+      setIsStreaming(false);
+    }
+  };
+
+  return (
+    <View style={{ flex: 1, justifyContent: 'center', padding: 20 }}>
+      <Text style={{ fontSize: 18, fontWeight: 'bold', marginBottom: 10 }}>
+        HLS Streaming to Samsung TV
+      </Text>
+
+      {samsungTV ? (
+        <Text style={{ marginBottom: 20 }}>
+          Connected to: {samsungTV.name}
+        </Text>
+      ) : (
+        <Text style={{ marginBottom: 20, color: 'red' }}>
+          No Samsung TV found
+        </Text>
+      )}
+
+      {progress && (
+        <Text style={{ marginBottom: 20, color: 'blue' }}>
+          Status: {progress}
+        </Text>
+      )}
+
+      <Button
+        title="Stream HLS Live"
+        onPress={streamHLS}
+        disabled={!samsungTV || isStreaming}
+      />
+
+      <View style={{ height: 10 }} />
+
+      <Button
+        title="Stream HLS VOD"
+        onPress={streamVOD}
+        disabled={!samsungTV || isStreaming}
+      />
+
+      <Text style={{ marginTop: 20, fontSize: 12, color: '#666' }}>
+        Note: HLS streaming requires Samsung Smart TV 2018+ or compatible DLNA device
+      </Text>
+    </View>
+  );
+}
+```
+
 ## API Reference
 
 ### DLNA Casting Functions
