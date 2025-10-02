@@ -9,6 +9,7 @@
     "android",
     "index.js",
     "index.d.ts",
+    "example",
     "ios",
     "react-native-dlna-player.podspec",
     "Neptune.framework",
