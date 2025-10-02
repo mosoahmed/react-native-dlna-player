@@ -16,10 +16,39 @@ A React Native library for DLNA/UPnP media casting and VLC-based video playback.
 
 ## Installation
 
+### From npm
+
 ```bash
 npm install @byron-react-native/dlna-player --save
 # or
 yarn add @byron-react-native/dlna-player
+```
+
+### From GitHub (Enhanced Fork)
+
+To install the enhanced version with full DLNA casting features directly from GitHub:
+
+```bash
+npm install github:mosoahmed/react-native-dlna-player
+# or
+yarn add github:mosoahmed/react-native-dlna-player
+```
+
+Or add to your `package.json`:
+
+```json
+{
+  "dependencies": {
+    "@byron-react-native/dlna-player": "github:mosoahmed/react-native-dlna-player"
+  }
+}
+```
+
+You can also specify a specific branch or commit:
+
+```bash
+npm install github:mosoahmed/react-native-dlna-player#main
+npm install github:mosoahmed/react-native-dlna-player#f23a4ff
 ```
 
 ### React Native 0.60+
