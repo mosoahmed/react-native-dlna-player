@@ -24,8 +24,16 @@ Pod::Spec.new do |s|
   s.requires_arc = true
 
   s.vendored_frameworks = 'Neptune.framework', 'Platinum.framework'
-  
+
+  # Exclude x86_64 architecture (old Intel Macs) - use arm64 only
+  s.pod_target_xcconfig = {
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'x86_64'
+  }
+  s.user_target_xcconfig = {
+    'EXCLUDED_ARCHS[sdk=iphonesimulator*]' => 'x86_64'
+  }
+
   s.dependency "React"
-  s.dependency 'MobileVLCKit', '3.3.17'  
+  s.dependency 'MobileVLCKit', '3.3.17'
 end
 
