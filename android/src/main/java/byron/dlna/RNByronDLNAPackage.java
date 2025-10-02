@@ -18,7 +18,7 @@ public class RNByronDLNAPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(@NonNull ReactApplicationContext reactContext) {
         return Collections.<NativeModule>singletonList(
-                new RNByronDLNAModule(reactContext)
+                new RNByronDLNAModuleEnhanced(reactContext)
         );
     }
 
