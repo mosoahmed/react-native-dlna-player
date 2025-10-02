@@ -180,7 +180,7 @@ public class RNByronDLNAModuleEnhanced extends ReactContextBaseJavaModule {
         if (upnpService == null) {
             promise.reject("SERVICE_NOT_STARTED",
                 "DLNA service not started. Call startService('Your App Name') before discovering devices.",
-                null);
+                (Throwable)null);
             return;
         }
 
@@ -232,14 +232,14 @@ public class RNByronDLNAModuleEnhanced extends ReactContextBaseJavaModule {
             promise.reject("MAX_RETRIES_EXCEEDED",
                 "Failed to cast after " + MAX_RETRIES + " attempts. " +
                 "Device may be offline or incompatible. Try restarting the device and discovering again.",
-                null);
+                (Throwable)null);
             return;
         }
 
         if (upnpService == null) {
             promise.reject("SERVICE_NOT_STARTED",
                 "DLNA service not started. Call startService('Your App Name') before casting.",
-                null);
+                (Throwable)null);
             return;
         }
 
@@ -252,7 +252,7 @@ public class RNByronDLNAModuleEnhanced extends ReactContextBaseJavaModule {
                     "Device with ID '" + deviceId + "' not found. " +
                     "Device may have gone offline or discovery needs to be re-run. " +
                     "Try calling discoverDevices() again.",
-                    null);
+                    (Throwable)null);
                 return;
             }
 
@@ -269,7 +269,7 @@ public class RNByronDLNAModuleEnhanced extends ReactContextBaseJavaModule {
                     "Device '" + deviceName + "' does not support AVTransport service. " +
                     "This device cannot play media via DLNA. " +
                     "Only MediaRenderer devices with AVTransport are supported.",
-                    null);
+                    (Throwable)null);
                 return;
             }
 
@@ -382,7 +382,7 @@ public class RNByronDLNAModuleEnhanced extends ReactContextBaseJavaModule {
         if (upnpService == null) {
             promise.reject("SERVICE_NOT_STARTED",
                 "DLNA service not started. Call startService('Your App Name') before controlling playback.",
-                null);
+                (Throwable)null);
             return;
         }
 
@@ -393,7 +393,7 @@ public class RNByronDLNAModuleEnhanced extends ReactContextBaseJavaModule {
                 promise.reject("DEVICE_NOT_FOUND",
                     "Device with ID '" + deviceId + "' not found. " +
                     "Device may have gone offline. Try discovering devices again.",
-                    null);
+                    (Throwable)null);
                 return;
             }
 
@@ -404,7 +404,7 @@ public class RNByronDLNAModuleEnhanced extends ReactContextBaseJavaModule {
                 promise.reject("SERVICE_NOT_AVAILABLE",
                     "Device '" + deviceName + "' does not support AVTransport service. " +
                     "Cannot control playback on this device.",
-                    null);
+                    (Throwable)null);
                 return;
             }
 
@@ -458,7 +458,7 @@ public class RNByronDLNAModuleEnhanced extends ReactContextBaseJavaModule {
                     promise.reject("INVALID_ACTION",
                         "Invalid action: '" + action + "'. " +
                         "Valid actions are: 'play', 'pause', 'stop'.",
-                        null);
+                        (Throwable)null);
             }
 
         } catch (Exception e) {
@@ -588,7 +588,7 @@ public class RNByronDLNAModuleEnhanced extends ReactContextBaseJavaModule {
             promise.reject("INVALID_URL",
                 "Video URL cannot be empty. " +
                 "Please provide a valid HTTP or HTTPS URL.",
-                null);
+                (Throwable)null);
             throw new IllegalArgumentException("Invalid URL");
         }
 
@@ -596,7 +596,7 @@ public class RNByronDLNAModuleEnhanced extends ReactContextBaseJavaModule {
             promise.reject("INVALID_URL",
                 "Invalid video URL: '" + url + "'. " +
                 "URL must start with http:// or https://.",
-                null);
+                (Throwable)null);
             throw new IllegalArgumentException("Invalid URL");
         }
 
