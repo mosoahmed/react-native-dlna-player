@@ -1,17 +1,15 @@
 # react-native-dlna-player
 
-A React Native library for DLNA/UPnP media casting and VLC-based video playback. Cast videos to smart TVs (Samsung, LG, Sony, etc.), discover DLNA devices on your network, and play media with advanced VLC player support.
+A React Native library for DLNA/UPnP media casting. Cast videos to smart TVs (Samsung, LG, Sony, etc.) and discover DLNA devices on your network.
 
 ## Features
 
 - 📺 **DLNA Casting**: Cast videos to smart TVs and DLNA-enabled devices
 - 🔍 **Device Discovery**: Automatically discover DLNA MediaRenderers on your network
 - 🎮 **Playback Control**: Control playback (play, pause, stop) on remote devices
-- 📱 **DLNA Renderer**: Turn your phone into a DLNA MediaRenderer to receive casts
-- 🎬 **VLC Player**: Embedded VLC player for local video playback with advanced controls
 - 🔄 **Auto-Retry**: Automatic retry logic with exponential backoff for reliable casting
 - 📊 **Progress Events**: Real-time casting progress notifications (connecting, buffering, playing)
-- 🌐 **HLS Support**: Stream HLS videos to Samsung Smart TVs (2018+)
+- 🌐 **HLS Support**: Stream HLS videos to Samsung Smart TVs and compatible devices
 - ✨ **TypeScript**: Full TypeScript definitions included
 
 ## Installation
@@ -148,55 +146,7 @@ export default function App() {
 }
 ```
 
-### 2. VLC Player for Local Playback
-
-```javascript
-import React, { useRef } from 'react';
-import { View, Button } from 'react-native';
-import { ByronPlayer, EventType } from '@byron-react-native/dlna-player';
-
-export default function VlcPlayerExample() {
-  const playerRef = useRef(null);
-
-  const handlePlay = () => {
-    playerRef.current?.setNativeProps({ paused: false });
-  };
-
-  const handlePause = () => {
-    playerRef.current?.setNativeProps({ paused: true });
-  };
-
-  return (
-    <View style={{ flex: 1 }}>
-      <ByronPlayer
-        ref={playerRef}
-        source={{
-          uri: 'http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
-          options: ['--rtsp-tcp', '-vvv'],
-        }}
-        style={{ width: '100%', height: 300 }}
-        paused={false}
-        volume={100}
-        onPlaying={(event) => {
-          console.log('Playing:', event.currentTime, '/', event.duration);
-        }}
-        onProgress={(event) => {
-          console.log('Progress:', event.position);
-        }}
-        onError={() => console.error('Playback error')}
-        onEndReached={() => console.log('Video ended')}
-      />
-
-      <View style={{ flexDirection: 'row', justifyContent: 'space-around', marginTop: 20 }}>
-        <Button title="Play" onPress={handlePlay} />
-        <Button title="Pause" onPress={handlePause} />
-      </View>
-    </View>
-  );
-}
-```
-
-### 3. HLS Streaming to Samsung TV
+### 2. HLS Streaming to Samsung TV
 
 ```javascript
 import React, { useEffect, useState } from 'react';
@@ -375,7 +325,7 @@ Casts a video to a DLNA device with automatic retry (3 attempts, 30s timeout per
 
 **Supported formats:**
 - MP4, AVI, MKV, MOV
-- HLS (.m3u8) on Samsung Smart TVs (2018+)
+- HLS (.m3u8) on compatible DLNA devices
 
 ```javascript
 try {
@@ -461,109 +411,6 @@ ByronEmitter.addListener(castProgressEventName, (progress) => {
 });
 ```
 
-### VLC Player Component
-
-#### `<ByronPlayer>`
-
-VLC-based video player component.
-
-**Props:**
-
-```typescript
-interface VlcProps {
-  source: {
-    uri: string;
-    options?: string[]; // VLC options (default: ['--rtsp-tcp', '-vvv'])
-  };
-  style?: ViewStyle;
-  paused?: boolean;
-  volume?: number; // 0-100
-  rate?: ScaleType; // Video scaling
-  time?: number; // Seek to time (ms)
-  aspectRatio?: string;
-
-  // Event callbacks
-  onPlaying?: (event: VlcEvent) => void;
-  onPaused?: () => void;
-  onStopped?: () => void;
-  onBuffering?: () => void;
-  onError?: () => void;
-  onEndReached?: () => void;
-  onProgress?: (event: VlcEvent) => void;
-}
-
-interface VlcEvent {
-  currentTime: number; // milliseconds
-  duration: number; // milliseconds
-  position: number; // 0.0 - 1.0
-  type: EventType;
-}
-```
-
-**Example:**
-
-```javascript
-<ByronPlayer
-  ref={playerRef}
-  source={{ uri: 'http://example.com/video.mp4' }}
-  style={{ width: '100%', height: 300 }}
-  paused={false}
-  volume={50}
-  rate={ScaleType.SURFACE_BEST_FIT}
-  onPlaying={(e) => console.log(`Playing: ${e.currentTime}ms / ${e.duration}ms`)}
-  onProgress={(e) => console.log(`Progress: ${(e.position * 100).toFixed(1)}%`)}
-/>
-```
-
-**Scale Types:**
-
-```javascript
-ScaleType.SURFACE_BEST_FIT
-ScaleType.SURFACE_FIT_SCREEN
-ScaleType.SURFACE_FILL
-ScaleType.SURFACE_16_9
-ScaleType.SURFACE_4_3
-ScaleType.SURFACE_ORIGINAL
-```
-
-**Control playback:**
-
-```javascript
-const playerRef = useRef(null);
-
-// Play
-playerRef.current?.setNativeProps({ paused: false });
-
-// Pause
-playerRef.current?.setNativeProps({ paused: true });
-
-// Seek to 30 seconds
-playerRef.current?.setNativeProps({ time: 30000 });
-
-// Set volume to 75%
-playerRef.current?.setNativeProps({ volume: 75 });
-
-// Change aspect ratio
-playerRef.current?.setNativeProps({ rate: ScaleType.SURFACE_16_9 });
-```
-
-### Utility Functions
-
-#### `isInstalledApp(bundleId: string): Promise<boolean>`
-
-Checks if an app is installed (iOS/Android).
-
-```javascript
-const hasVLC = await isInstalledApp('org.videolan.vlc');
-```
-
-#### `startApp(bundleId: string): void`
-
-Launches an external app.
-
-```javascript
-startApp('org.videolan.vlc');
-```
 
 ## TypeScript Support
 
@@ -572,10 +419,6 @@ Full TypeScript definitions are included:
 ```typescript
 import {
   DLNADevice,
-  VlcEvent,
-  VlcProps,
-  ScaleType,
-  EventType,
 } from '@byron-react-native/dlna-player';
 ```
 
@@ -606,14 +449,8 @@ See the [full example](./example/CastingExample.js) for a comprehensive implemen
 
 ### HLS streaming not working
 
-- HLS is only supported on Samsung Smart TVs (2018+)
-- Older models may only support MP4/AVI formats
-
-### VLC player shows black screen
-
-- Check if video URL is accessible
-- Try different VLC options: `['--rtsp-tcp']` or `[]`
-- Listen to `onError` callback for details
+- HLS format may not be supported by all DLNA devices
+- Try MP4/AVI formats for broader compatibility
 
 ## Requirements
 
